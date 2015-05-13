@@ -1,7 +1,7 @@
-" git.vim -- Subversion control system mappings
+" git.vim -- Git control system mappings
 " Maintainer:	Jeff Pitblado <jpitblado@stata.com>
-" Last Change:	25aug2014
-" Version:	1.0.1
+" Last Change:	12may2015
+" Version:	1.0.2
 
 if exists("g:loaded_git_vim")
   finish
@@ -15,8 +15,9 @@ endif
 " maps ----------------------------------------------------------------------
 
 nnoremap <leader>gd :call git#diff("", bufname("%"))<cr>
-nnoremap <leader>ge :call git#diff("--cached", bufname("%"))<cr>
 nnoremap <leader>gD :call git#diff("", ".")<cr>
+nnoremap <leader>ge :call git#diff("--cached", bufname("%"))<cr>
+nnoremap <leader>gE :call git#diff("--cached", ".")<cr>
 
 nnoremap <leader>gs :call git#status()<cr>
 
