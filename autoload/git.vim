@@ -43,7 +43,7 @@ endfunction
 " buffer.
 
 function! git#status ()
-	let output = system(g:git_command . " status")
+	let output = system(g:git_command . " status --short")
 	if v:shell_error
 		let output = bufname("%") . " NOT UNDER VERSION CONTROL"
 	endif
