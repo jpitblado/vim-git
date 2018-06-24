@@ -1,0 +1,132 @@
+#!/usr/bin/env python
+# git-beautify_readme
+# version 1.0.0  24jun2018
+
+import os
+import re
+import sys
+
+self = os.path.basename(sys.argv[0])
+def usage():
+	print("""
+usage: %s <README_files>
+       %s --
+
+Modify copies of <README_files> to look better.
+Will translate lines that match output from 'git status --short'.
+
+The '--' syntax works with standard input instead of files.
+
+Example:
+
+	$ %s README
+	README:
+	  lines total:    100
+	  lines modified: 5
+	  new file:       README-mod""" % (self,self,self))
+	sys.exit(1)
+
+class Info:
+	def __init__(self):
+		# regex for matching files with notes already
+		self.n_re = re.compile(r'^    (\S+[\S ]*\S)\s*<-+\s*(.*)\s*$')
+		# regex for matching lines from 'git status --short'
+		self.s_re = re.compile(r'^([ MADRCU])([ MADRCU])\s+(\S+[\S ]*\S)( -> )?(\S+[\S]*\S)?$')
+		# class constants
+		self.space	= ' '
+		self.tab	= '\t'
+		self.arrow	= '<-- '
+		self.indentlen	= 4
+		self.indent	= self.indentlen * self.space
+		self.tablen	= 8
+		self.newline	= '\n'
+		self.linesize	= 80 - self.indentlen - self.tablen
+		# reset counters
+		self.reset()
+	def reset(self):
+		# counter: total number of lines
+		self.c_total	= 0
+		# counter: modified lines
+		self.c_mod	= 0
+	def parse(self, line, wf):
+		self.c_total += 1
+		mn = self.n_re.match(line)
+		ms = self.s_re.match(line)
+		if mn:
+			self.c_mod += 1
+			len1 = len(mn.group(1))
+			len2 = len(mn.group(2))
+			rest = self.linesize - len1
+			ntabs = 1
+			if rest > self.tablen:
+				ntabs = (rest-1) // self.tablen
+			tabs = ntabs * self.tab
+			line = self.indent + \
+				mn.group(1) + \
+				tabs + \
+				self.arrow + \
+				mn.group(2) + \
+				self.newline
+		elif ms:
+			self.c_mod += 1
+			stype1 = ms.group(1)
+			stype2 = ms.group(2)
+			note = ''
+			if stype1 == 'A' or stype2 == 'A':
+				note = self.arrow + 'New'
+			elif stype2 == 'D' or stype2 == 'D':
+				note = self.arrow + 'Del'
+			len1 = len(ms.group(3))
+			len2 = len(note)
+			rest = self.linesize - len1
+			ntabs = 1
+			if rest > self.tablen:
+				ntabs = (rest-1) // self.tablen
+			tabs = ''
+			if note != '':
+				tabs = ntabs * self.tab
+			line = self.indent + \
+				ms.group(3) + \
+				tabs + \
+				note + \
+				self.newline
+		wf.write(line)
+	def report(self, file):
+		print("%s:" % file)
+		print("  lines total:    %d" % self.c_total)
+		print("  lines modified: %d" % self.c_mod)
+		print("  new file:       %s-mod" % file)
+
+nargs = len(sys.argv)
+if nargs == 1:
+	usage()
+
+# sanity check on the list of arguments
+use_stdin = False
+for arg in sys.argv[1:]:
+	if arg == '--':
+		if nargs != 2:
+			print("%s: '--' not allowed with other arguments" % self)
+			sys.exit(1)
+		use_stdin = True
+	elif not os.path.isfile(arg):
+		print("%s: %s is NOT a file" % (self,arg))
+		sys.exit(1)
+
+info = Info()
+
+if use_stdin:
+	rf=sys.stdin
+	wf=sys.stdout
+	for line in rf:
+		info.parse(line, wf)
+else:
+	for arg in sys.argv[1:]:
+		mod = arg + "-mod"
+		with open(arg, 'r') as rf, open(mod, 'w') as wf:
+			info.reset()
+			for line in rf:
+				info.parse(line, wf)
+		info.report(arg)
+
+# end: beautify_readme

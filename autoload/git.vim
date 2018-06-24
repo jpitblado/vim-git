@@ -1,7 +1,7 @@
 " git.vim -- Git control system mappings
 " Maintainer:	Jeff Pitblado <jpitblado@stata.com>
-" Last Change:	25aug2014
-" Version:	1.0.0
+" Last Change:	24jun2018
+" Version:	1.1.0
 
 if exists("g:autoloaded_git_vim")
   finish
@@ -10,6 +10,7 @@ let g:autoloaded_git_vim = 1
 
 if !exists("g:git_command")
 	let g:git_command = "git"
+	let g:git_beautify = "git-beautify_readme"
 endif
 
 " functions -----------------------------------------------------------------
@@ -44,6 +45,19 @@ endfunction
 
 function! git#status ()
 	let output = system(g:git_command . " status --short")
+	if v:shell_error
+		let output = bufname("%") . " NOT UNDER VERSION CONTROL"
+	endif
+
+	" insert diff output
+	call append(line("."), split(output, '\v\n'))
+endfunction
+
+" git#status4log() -- Filter output from -git status- and dumps the
+" contents into the current buffer.
+
+function! git#status4log ()
+	let output = system(g:git_command . " status --short | git-beautify_readme --")
 	if v:shell_error
 		let output = bufname("%") . " NOT UNDER VERSION CONTROL"
 	endif

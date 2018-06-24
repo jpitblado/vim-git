@@ -1,7 +1,7 @@
 " git.vim -- Git control system mappings
 " Maintainer:	Jeff Pitblado <jpitblado@stata.com>
-" Last Change:	12may2015
-" Version:	1.0.2
+" Last Change:	24jun2018
+" Version:	1.1.0
 
 if exists("g:loaded_git_vim")
   finish
@@ -20,6 +20,7 @@ nnoremap <leader>ge :call git#diff("--cached", bufname("%"))<cr>
 nnoremap <leader>gE :call git#diff("--cached", ".")<cr>
 
 nnoremap <leader>gs :call git#status()<cr>
+nnoremap <leader>gl :call git#status4log()<cr>
 
 nnoremap <leader>ga :!git add %<cr>
 nnoremap <leader>gc :!git commit %<cr>
