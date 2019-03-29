@@ -27,13 +27,14 @@ function! git#diff (rev, file)
 	" open/setup a new split
 	if bufwinnr("__diff_output__") == -1
 		split __diff_output__
-		setlocal noswapfile
-		setlocal filetype=diff
-		setlocal buftype=nofile
 	else
 		sbuffer __diff_output__
-		normal! ggdG
 	endif
+
+	setlocal noswapfile
+	setlocal buftype=nofile
+	setlocal filetype=diff
+	normal! ggdG
 
 	" insert diff output
 	call append(0, split(output, '\v\n'))
