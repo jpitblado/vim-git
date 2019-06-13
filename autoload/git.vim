@@ -58,7 +58,7 @@ endfunction
 " contents into the current buffer.
 
 function! git#status4log ()
-	let output = system(g:git_command . " status --short | git-beautify_readme --")
+	let output = system(g:git_command . " status --short | grep -v '^??' | git-beautify_readme --")
 	if v:shell_error
 		let output = bufname("%") . " NOT UNDER VERSION CONTROL"
 	endif
