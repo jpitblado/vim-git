@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # git-beautify_readme
-# version 1.0.0  24jun2018
+# version 1.0.1  25jun2019
 
 import os
 import re
@@ -74,7 +74,7 @@ class Info:
 			note = ''
 			if stype1 == 'A' or stype2 == 'A':
 				note = self.arrow + 'New'
-			elif stype2 == 'D' or stype2 == 'D':
+			elif stype1 == 'D' or stype2 == 'D':
 				note = self.arrow + 'Del'
 			len1 = len(ms.group(3))
 			len2 = len(note)
