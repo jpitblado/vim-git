@@ -18,7 +18,7 @@ git clone https://github.com/jpitblado/vim-git.git
 
 Documentation for the mappings and functions.
 
-Add support for other Subversion subcommands.
+Add support for other Git subcommands.
 Current support is:
 
 	git add
