@@ -36,7 +36,7 @@ class Info:
 		self.space	= ' '
 		self.tab	= '\t'
 		self.arrow	= '<-- '
-		self.indentlen	= 4
+		self.indentlen	= 0
 		self.indent	= self.indentlen * self.space
 		self.tablen	= 8
 		self.newline	= '\n'
