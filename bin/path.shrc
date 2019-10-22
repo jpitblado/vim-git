@@ -1,0 +1,13 @@
+# path.shrc
+
+# prepend these to the path
+if declare -f pathmunge > /dev/null 2>&1
+then
+	pathmunge $HOME/.vim/bundle/vim-git/bin
+else
+	PATH=$HOME/.vim/bundle/vim-git/bin:$PATH
+fi
+
+export PATH
+
+# end: path.shrc
