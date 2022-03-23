@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # git-beautify_readme
-# version 1.0.1  25jun2019
+# version 1.0.2  23mar2022
 
 import os
 import re
